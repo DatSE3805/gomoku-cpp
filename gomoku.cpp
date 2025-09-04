@@ -1,0 +1,150 @@
+#include <iostream>
+#include <cstdlib>
+#include <iomanip>
+using namespace std;
+
+#define MAX_SIZE 15
+
+const char HORZ = 196;
+const char VERT = 179;
+const char TL   = 218;
+const char TM   = 194;
+const char TR   = 191;
+const char BL   = 192;
+const char BM   = 193;
+const char BR   = 217;
+const int numW  = 3;
+const int charW = 1;
+const int numPerLine = 15;
+const char VERT_START = 195;
+const char VERT_END = 180;
+const char VERT_MID = 197;
+const string inputCommand = "Previous move/Next move/Stop [p/n/s]: ";
+const string endOfHistory = "This is the end of the match.\nPrevious move/Next move/Stop [p/n/s]: ";
+const string startOfGame = "This is the start of the match.\nPrevious move/Next move/Stop [p/n/s]: ";
+const string invalidInput = "Illegal input, please try again: ";
+
+enum Stone {NA, X, O};
+
+string lineString( char left, char mid, char right, char horz, int wcell, int ncell )
+{
+   string result = "", cell = string( wcell, horz );
+   result += left;
+   for ( int i = 0; i < ncell - 1; i++ ) result += cell + mid;
+   result += cell + right;
+   return result;
+}
+
+void displayBoard(Stone arr[][MAX_SIZE], int size) {
+    //UPPERLINE
+    cout << "   ";
+    for(int i = 0; i < size; i++) {
+        cout << "  " << (char)(i + 'a') << " ";
+    }
+    cout << endl;
+    cout << "   " << lineString( TL, TM, TR, HORZ, 3, numPerLine ) << "\n";
+
+    //MIDDLE
+    for(int i = 0; i < size; i++) {
+        cout << setw(2) << size - i << " " << VERT;
+        for(int j = 0; j < size; j++) {
+            if(arr[i][j] == NA) cout << "   " << VERT;
+            if(arr[i][j] == X) cout << " X " << VERT;
+            if(arr[i][j] == O) cout << " O " << VERT;
+        }
+        cout << endl;
+        if(i != size - 1) cout << "   " << lineString( VERT_START, VERT_MID, VERT_END, HORZ, 3, numPerLine ) << "\n";
+    }
+
+    //UNDERLINE
+    cout << "   " << lineString( BL, BM, BR, HORZ, 3, numPerLine ) << "\n";
+}
+
+void displayBoardSimple(Stone arr[][MAX_SIZE], int size) {
+    for(int i = 0; i < size; i++){
+        for(int j = 0; j < size; j++) {
+            cout << arr[i][j];
+        }
+    }
+    cout << endl;
+}
+
+bool makeMove(Stone board[][MAX_SIZE], int size, string playerMove, bool isFirstPlayerTurn){
+    //BEGIN TODO
+
+    //END TODO
+}
+
+bool hasWon(Stone board[][MAX_SIZE], int size, bool isFirstPlayerTurn) {
+    //BEGIN TODO
+
+    //END TODO
+}
+
+void displayHistory(string history, int numOfMoves) {
+    //BEGIN TODO
+
+    //END TODO
+}
+
+void startGame() {
+    Stone game[15][15];
+    for(int i = 0; i < MAX_SIZE; i++) {
+        for(int j = 0; j < MAX_SIZE; j++) {
+            game[i][j] = NA;
+        }
+    }
+    displayBoard(game, MAX_SIZE);
+    string playerMove;
+    bool player1Turn = true;
+    cout << "Player 1 turn: ";
+    while(cin >> playerMove) {
+        if(playerMove == "ff") {
+            cout << ((player1Turn) ? "Player 2 won " : "Player 1 won ");
+            break;
+        }
+        else if(makeMove(game, MAX_SIZE, playerMove, player1Turn)){
+            if(hasWon(game, MAX_SIZE, player1Turn)) {
+                displayBoard(game, MAX_SIZE);
+                cout << ((player1Turn) ? "Player 1 won " : "Player 2 won ");
+                return;
+            }
+            player1Turn = !player1Turn;
+            displayBoard(game, MAX_SIZE);
+            cout << ((player1Turn) ? "Player 1 turn: " : "Player 2 turn: ");
+        } else {
+            cout << "Illegal move, please try again: ";
+        }
+    }
+}
+
+int main()
+{
+    cout << "Welcome to Gomoku!" << endl;
+    cout << "1. Play game" << endl;
+    cout << "2. History" << endl;
+    cout << "3. Exit" << endl;
+    cout << "Please select mode [1/2/3]: ";
+    int mode;
+    while(cin >> mode){
+        if(mode == 1) {
+            startGame();
+            return 0;
+        } else if (mode == 2) {
+            int numOfMoves;
+            cout << "Please enter number of moves: ";
+            cin >> numOfMoves;
+            string history;
+            cout << "Please enter history: ";
+            cin >> history;
+            displayHistory(history, numOfMoves);
+            return 0;
+        } else if (mode == 3) {
+            return 0;
+        } else {
+            cout << "Invalid mode, please try again: ";
+        }
+    }
+
+    return 0;
+}
